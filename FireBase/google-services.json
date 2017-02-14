@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "539190944120",
+    "firebase_url": "https://letsunite-4cac9.firebaseio.com",
+    "project_id": "letsunite-4cac9",
+    "storage_bucket": "letsunite-4cac9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539190944120:android:3ebdf1b9566dc980",
+        "android_client_info": {
+          "package_name": "com.example.abdulrahmanalshaghdali.letsunite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539190944120-n7dfoh2s8mu1vrgiojk76hmopq0rdeks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChGIotkkyIOJ1m0DwFQr0znYUtw4OaRdg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

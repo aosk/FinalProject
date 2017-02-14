@@ -1,0 +1,3 @@
+Server Access: 
+
+sudo ssh -i "/Users/abdulrahmanalshaghdali/Google Drive/Final Project/Server/letsunite.pem" ubuntu@ec2-54-191-242-216.us-west-2.compute.amazonaws.com
