@@ -123,5 +123,6 @@ public class GetActivity extends AppCompatActivity {
 
 
         }
+        //this is only for testing
     }
 }
