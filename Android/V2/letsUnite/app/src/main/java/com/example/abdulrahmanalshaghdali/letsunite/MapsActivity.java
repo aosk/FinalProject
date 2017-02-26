@@ -1,5 +1,6 @@
 package com.example.abdulrahmanalshaghdali.letsunite;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -22,6 +23,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
@@ -65,7 +69,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .build();
-
         }
 
         shareLocation = (Button) findViewById(R.id.shareLocationBTN);
@@ -75,14 +78,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v)
             {
 
-                Toast.makeText(MapsActivity.this, "new location: "+newLocationLat+ " "+ newLocationLong,
-                        Toast.LENGTH_LONG).show();
+                try {
+                    JSONObject postData = new JSONObject();
+                    //postData.put("lat", newLocationLat);
+                    //postData.put("long", newLocationLong);
+
+                    postData.put("lat", "53.337318");
+                    postData.put("long", "-6.267285");
+
+                    String str = postData.toString();
+
+
+
+                    BackgroundTasks asyncLoad = new BackgroundTasks();
+                    asyncLoad.execute("location/", str);
+
+                    Toast.makeText(MapsActivity.this, "Your location is saved now buddy ;) " + newLocationLat + newLocationLong,
+                            Toast.LENGTH_LONG).show();
+
+
+
+                } catch(JSONException e){
+                    e.printStackTrace();
+                }
 
             }
         });
-
-
     }
+
 
 
     public void showMap()
@@ -107,12 +130,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-
     }
 
     public void addNewMarker(LatLng latLng)
     {
-
         // new location coordinates
         newLocationLat = latLng.latitude ;
         newLocationLong = latLng.longitude;
@@ -137,14 +158,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
-
         mMap = googleMap;
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle)
     {
-
         // check permessions for location and internet,, and redirect if not permitted
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
@@ -160,7 +179,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             longT = mLastLocation.getLongitude();
 
             showMap();
-
         }
 
     }

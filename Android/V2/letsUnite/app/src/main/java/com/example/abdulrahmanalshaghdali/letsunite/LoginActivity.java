@@ -1,5 +1,6 @@
 package com.example.abdulrahmanalshaghdali.letsunite;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -26,8 +27,22 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.Buffer;
+
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 import static android.R.id.message;
 import static java.net.Proxy.Type.HTTP;
@@ -37,7 +52,6 @@ import static java.net.Proxy.Type.HTTP;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    String data = "";
 
     // UI references.
     private EditText mEmailView;
@@ -54,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        Log.d("Login works", "This is the login Activity.");
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.email);
         // password
@@ -62,29 +76,43 @@ public class LoginActivity extends AppCompatActivity {
         singinBTN = (Button) findViewById(R.id.email_sign_in_button);
         singinBTN.setOnClickListener(new View.OnClickListener() {
 
-
             @Override
             public void onClick(View v) {
 
-                String server = "http://54.191.242.216:8000/";
-                String local = "http://10.0.2.2:8000/login/";
-
-                JSONObject postData = new JSONObject();
-                try {
-                    postData.put("email", mEmailView.getText().toString());
-                    postData.put("password", mPasswordView.getText().toString());
-
-                    //Toast.makeText(LoginActivity.this, postData.toString() + "Data sent",
-                    //        Toast.LENGTH_LONG).show();
 
 
-                    //SendDeviceDetails sa = new SendDeviceDetails();//("http://127.0.0.1:8000/login/", postData.toString())
-                    new LoginActivity.SendDeviceDetails().execute(local, postData.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(LoginActivity.this, "login failed 2 ==)",
+                String emailLoginCheck = mEmailView.getText().toString();
+                String passwordLoginCheck = mPasswordView.getText().toString();
+
+                if(emailLoginCheck.equals("") || passwordLoginCheck.equals("")) {
+
+                    Toast.makeText(LoginActivity.this, "You are funny, Enter Email & Password",
                             Toast.LENGTH_LONG).show();
+                }else{
+
+                    try {
+                        JSONObject postData = new JSONObject();
+                        postData.put("email", mEmailView.getText().toString());
+                        postData.put("password", mPasswordView.getText().toString());
+
+                        String str = postData.toString();
+
+
+
+                        BackgroundTasks asyncLoad = new BackgroundTasks();
+                        asyncLoad.execute("login/", str);
+
+                        Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                        LoginActivity.this.startActivity(myIntent);
+
+                    } catch(JSONException e){
+                        e.printStackTrace();
+                    }
                 }
+
+
+
+
 
 
 
@@ -107,95 +135,24 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         signupBTN = (Button) findViewById(R.id.signUp);
+
+        signupBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent signup = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(signup);
+            }
+        });
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-    }
 
 
 
-    private class SendDeviceDetails extends AsyncTask<String, Void, String> {
 
-
-        @Override
-        protected String doInBackground(final String... params) {
-
-
-            Thread t = new Thread() {
-
-
-
-                public void run() {
-                    Looper.prepare(); //For Preparing Message Pool for the child Thread
-                    String data = "";
-
-                    HttpURLConnection httpURLConnection = null;
-
-
-
-                    try {
-
-
-
-                        httpURLConnection = (HttpURLConnection) new URL(params[0]).openConnection();
-                        httpURLConnection.setRequestMethod("POST");
-
-                        httpURLConnection.setDoOutput(true);
-
-                        DataOutputStream wr = new DataOutputStream(httpURLConnection.getOutputStream());
-                        wr.writeBytes("PostData=" + params[1]);//----------------------- Check point --!
-                        Toast.makeText(LoginActivity.this, params[1] + "Data sent",
-                                Toast.LENGTH_LONG).show();
-
-                        wr.flush();
-                        wr.close();
-
-                        /*
-                        InputStream in = httpURLConnection.getInputStream();
-                        InputStreamReader inputStreamReader = new InputStreamReader(in);
-
-                        int inputStreamData = inputStreamReader.read();
-                        while (inputStreamData != -1) {
-                            char current = (char) inputStreamData;
-                            inputStreamData = inputStreamReader.read();
-                            data += current;
-                        }*/
-
-                        InputStream in = httpURLConnection.getInputStream();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-                        StringBuilder result = new StringBuilder();
-                        String line;
-                        while((line = reader.readLine()) != null)
-                        {
-                            result.append(line);
-                        }
-                        System.out.println(result.toString());
-
-
-
-                    /*Checking response */
-                        if (httpURLConnection != null) {
-                            httpURLConnection.disconnect();
-                            Toast.makeText(LoginActivity.this, "Connection disconnected",
-                                    Toast.LENGTH_LONG).show();
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(LoginActivity.this, "Cannot Estabilish Connection",
-                                Toast.LENGTH_LONG).show();
-                    }
-
-                    Looper.loop(); //Loop in the message queue
-                }
-            };
-
-            t.start();
-            return data;
-
-        }
 
     }
-
 }
