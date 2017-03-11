@@ -1,12 +1,7 @@
 package com.example.abdulrahmanalshaghdali.letsunite;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,38 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.apache.http.params.HttpConnectionParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.Buffer;
-
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-
-import static android.R.id.message;
-import static java.net.Proxy.Type.HTTP;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A login screen that offers login via email/password.
@@ -96,26 +66,31 @@ public class LoginActivity extends AppCompatActivity {
                         postData.put("password", mPasswordView.getText().toString());
 
                         String str = postData.toString();
-
+                        String re="";
 
 
                         BackgroundTasks asyncLoad = new BackgroundTasks();
-                        asyncLoad.execute("login/", str);
+                        asyncLoad.execute("login/", str, "POST");
+                        re = asyncLoad.get(5,TimeUnit.SECONDS);
+                        Log.d("=-=-=-=-=-=-=--=-=-=>",re);
+                        if(re.equals("200")) {
+                            Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                            LoginActivity.this.startActivity(myIntent);
+                        }else if(re.equals("400")){
+                            Toast.makeText(LoginActivity.this, "You are not united !! Signup Plzz",
+                                    Toast.LENGTH_LONG).show();
 
-                        Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-                        LoginActivity.this.startActivity(myIntent);
+                        }else{
+                            Toast.makeText(LoginActivity.this, "Check your internet connection dude !!",
+                                    Toast.LENGTH_LONG).show();
+                        }
 
                     } catch(JSONException e){
                         e.printStackTrace();
+                    } catch(Exception e){
+                        e.printStackTrace();
                     }
                 }
-
-
-
-
-
-
-
                 /*
                 String email = mEmailView.getText().toString();
                 String password = mPasswordView.getText().toString();

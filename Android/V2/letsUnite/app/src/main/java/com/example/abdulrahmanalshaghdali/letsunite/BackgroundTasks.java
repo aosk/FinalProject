@@ -13,23 +13,46 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
+import java.util.ArrayList;
 /**
  * Created by alshaghdali on 23/02/2017.
  */
 
 public class BackgroundTasks extends AsyncTask<String, String, String> {
 
+    protected String r="OOOOOOps";
+    protected ArrayList<String> LABELS = null;
+    protected ArrayList<String> config= null;
 
+    @Override
+    protected void onPreExecute(){
+        LABELS = new ArrayList<>();
+        config = new ArrayList<>();
+        LABELS.add("Content-Type");
+        LABELS.add("Accept");
+        LABELS.add("UTF-8");
+    }
     @Override
     protected String doInBackground (String... params){
 
-
+        if(params[2].equals("POST")){
+            config.add("application/json");
+            config.add("POST");
+        }else if(params[2].equals("GET")) {
+            config.add("application/html");
+            config.add("GET");
+        }else if(params[2].equals("PUT")){
+            config.add("application/html");
+            config.add("PUT");
+        }else{
+            //default config
+            Log.d("Method","Not Known");
+        }
 
         try {
 
             String local = "http://10.0.2.2:8000/";
-            String machine = "http://192.168.0.171:8000/";//to test phone on local
+            String machine = "http://192.168.0.171:8000/";//to tesyt phone on local
             String server = "http://54.191.242.216:8000/";
 
 
@@ -37,57 +60,62 @@ public class BackgroundTasks extends AsyncTask<String, String, String> {
 
             httpURLConnection = (HttpURLConnection) new URL(local+""+params[0]).openConnection();
 
-
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
             httpURLConnection.setUseCaches(false);
-            httpURLConnection.setRequestProperty("Content-Type", "application/json");
-            httpURLConnection.setRequestProperty("Accept", "application/json");
-            httpURLConnection.setRequestMethod("POST");
-            Log.d("before connection","hi");
+            httpURLConnection.setRequestProperty(LABELS.get(0), config.get(0));
+            httpURLConnection.setRequestProperty(LABELS.get(1), config.get(0));
+            httpURLConnection.setRequestMethod(config.get(1));
+            Log.d("Not connected yet Abdul !! "," -=-");
             httpURLConnection.connect();
-            Log.d("After","Horray");
+            Log.d("It is connected now !! "," okay");
             OutputStream wr = httpURLConnection.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(wr, "UTF-8");
             osw.write(params[1]);//----------------------- Check point --!
-            Log.d("params[1]",params[1]);
+            Log.d("config[1]============>",config.get(1));
             osw.flush();
             osw.close();
             wr.close();
 
+            String respond=null;
 
             InputStream in = httpURLConnection.getInputStream();
+            Log.d("Connection   -----> ","closed");
             InputStreamReader inputStreamReader = new InputStreamReader(in, "UTF-8");
-            BufferedReader br = new BufferedReader(inputStreamReader);
-
-            String line = null;
-            String o = null;
-            while ((line = br.readLine()) != null) {
-                o += line;
+            if("PUT".equals(config.get(1))) {
+                Log.d("Get IO","Before");
+                BufferedReader br = new BufferedReader(inputStreamReader);
+                Log.d("Got IO","Yeap");
+                //Convert to JSON
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    respond += (line+'\n');
+                }
+                br.close();
+            }else{
+                respond = Integer.toString(httpURLConnection.getResponseCode());
             }
-            Log.d("MyApp", "I am here  <===================================== !!>");
-            System.out.println(o);
-            br.close();
-            return params[2];
+            Log.d("Stream connected","-=-=-=-=-=-= Good Worked =-=-=-=-=-=-");
+
+            Log.d("Data line:",respond);
+            Log.d("pick the nick !!  <===================================== !!>",respond);
+            r=respond;
+            Log.d("Abdul ..!! ", "I am here  <=====================================> Your debug buddy <=============================================>!!>");
+            //br.close();
+            httpURLConnection.disconnect();
+            return respond;
 
         } catch (Exception e) {
             e.printStackTrace();
             //Toast.makeText(LoginActivity.this, "Cannot Estabilish Connection",
             //       Toast.LENGTH_LONG).show();
         }
-        return null;
+        return r;
     }
 
     @Override
     protected void onPostExecute (String result){
-        super.onPostExecute(result);
-
-        Log.d("Finshed ", "Process");
-
+        Log.d("Finshed ", "Execution");
     }
-
-    //Looper.loop(); //Loop in the message queue
-    //}
-
 
 }

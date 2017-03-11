@@ -3,6 +3,7 @@ package com.example.abdulrahmanalshaghdali.letsunite;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,85 +33,61 @@ public class GetActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(GetActivity.this, " posted to the server !! " ,
+                Toast.makeText(GetActivity.this, " News are Requested !! " ,
                         Toast.LENGTH_LONG).show();
 
                 String url = "https://api.github.com/users";
                 String url2 = "http://54.191.242.216:8080/";
-                String url3 = "http://localhost:8000/users/";
+                String url3 = "http://10.0.2.2:8080/";
 
 
-                //new GetActivity.Httprequest().execute(url3);
+                new Httprequest().execute(url3);
+
             }
         });
     }
 
-    /*
-   *
-   * Http API
-   *
-   * */
-    public class Httprequest extends AsyncTask<String, String, String>
-    {
+
+    public class Httprequest extends AsyncTask<String, String, String> {
         @Override
-        protected String doInBackground(String... params)
-        {
+        protected String doInBackground(String... params) {
 
             HttpURLConnection connection = null ;
             BufferedReader reader = null ;
 
-            try
-            {
+            try {
                 URL url = new URL(params[0]);
 
                 connection = (HttpURLConnection) url.openConnection();
-
                 InputStream stream = connection.getInputStream();
-
                 reader = new BufferedReader(new InputStreamReader(stream));
-
                 StringBuffer buffer = new StringBuffer();
 
                 String line = "";
-
-                while((line = reader.readLine()) != null)
-                {
+                while((line = reader.readLine()) != null) {
 
                     buffer.append(line);
                 }
-
                 return buffer.toString();
-            }
-            catch (MalformedURLException e)
-            {
-                e.printStackTrace();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-            finally
-            {
-                if(connection != null )
-                {
 
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+
+                if(connection != null ) {
                     connection.disconnect();
                 }
 
-                if(reader != null)
-                {
-                    try
-                    {
+                if(reader != null) {
+                    try {
                         reader.close();
-                    }
-                    catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
-
-
             return null;
         }
 
@@ -119,10 +96,9 @@ public class GetActivity extends AppCompatActivity {
         {
             super.onPostExecute(s);
 
+            Log.d("Now this is s ================> ", s);
+
             tx.setText(s.toString());
-
-
         }
-        //this is only for testing
     }
 }

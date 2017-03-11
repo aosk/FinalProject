@@ -25,6 +25,7 @@ public class Location_Activity extends AppCompatActivity implements GoogleApiCli
     TextView lan ;
     TextView longT ;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

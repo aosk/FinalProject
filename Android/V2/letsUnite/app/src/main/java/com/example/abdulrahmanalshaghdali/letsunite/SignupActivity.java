@@ -1,7 +1,9 @@
 package com.example.abdulrahmanalshaghdali.letsunite;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Array;
+import java.util.concurrent.TimeUnit;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -70,7 +73,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     if(nameChecker.equals("")){
 
-                        Toast.makeText(SignupActivity.this, "Enter First Name, Field is Empty",
+                        Toast.makeText(SignupActivity.this, "Fill all your details",
                                 Toast.LENGTH_LONG).show();
 
                     }else if(lastChecker.equals("")){
@@ -110,11 +113,30 @@ public class SignupActivity extends AppCompatActivity {
                         postData.put("password", passwordChecker);
 
                         String str = postData.toString();
+                        String re="";
+
 
                         BackgroundTasks asyncLoad = new BackgroundTasks();
-                        asyncLoad.execute("signup/", str);
+                        asyncLoad.execute("signup/", str, "POST");
+                        re = asyncLoad.get(5,TimeUnit.SECONDS);
+                        Log.d("HOPE ON ==============>",re);
+                        if(re.equals("200")) {
+                            Toast.makeText(SignupActivity.this, "Thanks for being united with us",
+                                    Toast.LENGTH_LONG).show();
+                            Intent myIntent = new Intent(SignupActivity.this, LoginActivity.class);
+                            SignupActivity.this.startActivity(myIntent);
+                        }else if(re.equals("400")){
+                            Toast.makeText(SignupActivity.this, "Opsss..!! we can't register your details ",
+                                    Toast.LENGTH_LONG).show();
+
+                        }else{
+                            Toast.makeText(SignupActivity.this, "Check your internet connection dude !!",
+                                    Toast.LENGTH_LONG).show();
+                        }
 
                     } catch(JSONException e){
+                        e.printStackTrace();
+                    } catch(Exception e){
                         e.printStackTrace();
                     }
 
