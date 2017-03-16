@@ -3,10 +3,13 @@ package com.example.abdulrahmanalshaghdali.letsunite;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -24,6 +27,9 @@ public class BackgroundTasks extends AsyncTask<String, String, String> {
     protected ArrayList<String> LABELS = null;
     protected ArrayList<String> config= null;
 
+    private String fname = "mydata";
+    //File f;
+
     @Override
     protected void onPreExecute(){
         LABELS = new ArrayList<>();
@@ -31,6 +37,10 @@ public class BackgroundTasks extends AsyncTask<String, String, String> {
         LABELS.add("Content-Type");
         LABELS.add("Accept");
         LABELS.add("UTF-8");
+        //f.open("info");
+
+
+
     }
     @Override
     protected String doInBackground (String... params){
@@ -52,7 +62,7 @@ public class BackgroundTasks extends AsyncTask<String, String, String> {
         try {
 
             String local = "http://10.0.2.2:8000/";
-            String machine = "http://192.168.0.171:8000/";//to tesyt phone on local
+            String machine = "http://192.168.0.171:8000/";//to test phone on local
             String server = "http://54.191.242.216:8000/";
 
 
@@ -65,14 +75,34 @@ public class BackgroundTasks extends AsyncTask<String, String, String> {
             httpURLConnection.setUseCaches(false);
             httpURLConnection.setRequestProperty(LABELS.get(0), config.get(0));
             httpURLConnection.setRequestProperty(LABELS.get(1), config.get(0));
+            if(params[2].equals("PUT")){
+                //String group_id = f.readLine();
+                //String user_id = f.readLine();
+                //f.close();
+
+
+
+
+                httpURLConnection.setRequestProperty("group_id", "test_group");
+                httpURLConnection.setRequestProperty("user_id", params[1]);
+
+                Log.d("Abdul ..!! ", "I am here  <=====================================DeBugLine=============================================>!!>");
+                Log.d("This is parms[0] sent to server ", params[0]);
+                Log.d("This is parms[1] sent to server ", params[1]);
+                Log.d("This is parms[2] sent to server ", params[2]);
+
+                httpURLConnection.setRequestProperty("x_loc", "5.123456");
+                httpURLConnection.setRequestProperty("y_loc", "-6.123456");
+
+            }
             httpURLConnection.setRequestMethod(config.get(1));
-            Log.d("Not connected yet Abdul !! "," -=-");
+            //Log.d("Not connected yet Abdul !! "," -=-");
             httpURLConnection.connect();
-            Log.d("It is connected now !! "," okay");
+            //Log.d("It is connected now !! "," okay");
             OutputStream wr = httpURLConnection.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(wr, "UTF-8");
             osw.write(params[1]);//----------------------- Check point --!
-            Log.d("config[1]============>",config.get(1));
+            //Log.d("config[1]============>",config.get(1));
             osw.flush();
             osw.close();
             wr.close();
@@ -97,10 +127,10 @@ public class BackgroundTasks extends AsyncTask<String, String, String> {
             }
             Log.d("Stream connected","-=-=-=-=-=-= Good Worked =-=-=-=-=-=-");
 
-            Log.d("Data line:",respond);
-            Log.d("pick the nick !!  <===================================== !!>",respond);
+            //Log.d("Data line:",respond);
+            //Log.d("pick the nick !!  <===================================== !!>",respond);
             r=respond;
-            Log.d("Abdul ..!! ", "I am here  <=====================================> Your debug buddy <=============================================>!!>");
+            //Log.d("Abdul ..!! ", "I am here  <=====================================> Your debug buddy <=============================================>!!>");
             //br.close();
             httpURLConnection.disconnect();
             return respond;
@@ -112,6 +142,7 @@ public class BackgroundTasks extends AsyncTask<String, String, String> {
         }
         return r;
     }
+
 
     @Override
     protected void onPostExecute (String result){

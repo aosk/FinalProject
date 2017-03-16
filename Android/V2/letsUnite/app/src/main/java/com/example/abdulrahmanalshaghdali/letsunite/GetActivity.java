@@ -1,6 +1,6 @@
 package com.example.abdulrahmanalshaghdali.letsunite;
 
-import android.os.AsyncTask;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,13 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+
+import java.util.concurrent.TimeUnit;
 
 public class GetActivity extends AppCompatActivity {
 
@@ -33,72 +28,28 @@ public class GetActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.d("Switch","News");
+                //String re="invalid";
+
+                BackgroundTasks asyncTask = new BackgroundTasks();
+
+                //token place should be a token that identify the user himself
+                asyncTask.execute("news/","token","PUT");
                 Toast.makeText(GetActivity.this, " News are Requested !! " ,
                         Toast.LENGTH_LONG).show();
+                try {
+                    String re = asyncTask.get(5, TimeUnit.SECONDS);
+                    tx.setText(re);
 
-                String url = "https://api.github.com/users";
-                String url2 = "http://54.191.242.216:8080/";
-                String url3 = "http://10.0.2.2:8080/";
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
 
-
-                new Httprequest().execute(url3);
 
             }
         });
     }
 
 
-    public class Httprequest extends AsyncTask<String, String, String> {
-        @Override
-        protected String doInBackground(String... params) {
-
-            HttpURLConnection connection = null ;
-            BufferedReader reader = null ;
-
-            try {
-                URL url = new URL(params[0]);
-
-                connection = (HttpURLConnection) url.openConnection();
-                InputStream stream = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(stream));
-                StringBuffer buffer = new StringBuffer();
-
-                String line = "";
-                while((line = reader.readLine()) != null) {
-
-                    buffer.append(line);
-                }
-                return buffer.toString();
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-
-                if(connection != null ) {
-                    connection.disconnect();
-                }
-
-                if(reader != null) {
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s)
-        {
-            super.onPostExecute(s);
-
-            Log.d("Now this is s ================> ", s);
-
-            tx.setText(s.toString());
-        }
-    }
 }

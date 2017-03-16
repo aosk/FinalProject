@@ -10,25 +10,33 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.abdulrahmanalshaghdali.letsunite.GetActivity">
 
+
     <Button
         android:text="Find news"
-        android:layout_width="235dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_x="49dp"
-        android:layout_y="436dp"
+        android:textSize="25sp"
+        android:layout_width="334dp"
+        android:layout_height="77dp"
         android:id="@+id/button2"
-        android:textColorLink="?attr/colorPrimary" />
+        android:textColorLink="?attr/colorPrimary"
+        android:background="@drawable/cast_album_art_placeholder"
+        android:textColor="@color/cast_expanded_controller_progress_text_color"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp"
+        android:layout_x="16dp"
+        android:layout_y="404dp" />
 
     <TextView
         android:text="News to be viewed here"
-        android:layout_width="336dp"
+        android:textSize="20sp"
+        android:layout_width="342dp"
         android:layout_height="346dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="56dp"
         android:layout_marginStart="56dp"
         android:id="@+id/textView2"
-        android:layout_y="30dp"
-        android:layout_x="13dp" />
+        android:layout_y="25dp"
+        android:layout_x="9dp" />
+
 </AbsoluteLayout>

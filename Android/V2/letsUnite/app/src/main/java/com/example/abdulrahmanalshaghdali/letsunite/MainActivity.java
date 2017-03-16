@@ -4,14 +4,25 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
+//import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -20,12 +31,20 @@ public class MainActivity extends AppCompatActivity {
     private Button friendsBTN;
     private Button eventBTN;
     private Button newsBTN;
+    private Switch switchBT;
+
+
 
     private TabHost th ;
 
     TextView tx;
     String text;
     ActionBar actionBar;
+    private Handler handler;
+    private String fname = "mydata";
+
+    String user_id;
+    String group_id;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -36,33 +55,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //handler = new Handler();
+        //handler.postDelayed(runnable,1000);
 
-/*
-        th = (TabHost) findViewById(R.id.tabs2);
-        th.setup();
 
-        TabHost.TabSpec ts1 = th.newTabSpec("tag1");
-        ts1.setIndicator("Bored");
-        ts1.setContent(R.id.bored);
+        try {
+            FileInputStream fin = openFileInput(fname);
+            InputStreamReader myReader = new InputStreamReader(fin);
+            BufferedReader myBR = new BufferedReader(myReader);
+            user_id = myBR.readLine();
+            group_id = myBR.readLine();
+            Log.d("user_id =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=>",user_id);
+            Log.d("group_id =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=>",group_id);
+            myBR.close();
+            myReader.close();
+            fin.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
 
-        th.addTab(ts1);
-
-        TabHost.TabSpec ts2 = th.newTabSpec("tag2");
-        ts2.setIndicator("Friends");
-        ts2.setContent(R.id.friends);
-        th.addTab(ts2);
-
-        TabHost.TabSpec  ts3 = th.newTabSpec("tag3");
-        ts3.setIndicator("Events");
-        ts3.setContent(R.id.events);
-        th.addTab(ts3);
-
-        TabHost.TabSpec  ts4 = th.newTabSpec("tag4");
-        ts4.setIndicator("News");
-        ts4.setContent(R.id.news);
-        th.addTab(ts4);
-        //tx = (TextView) findViewById(R.id.textView);
-*/
 
         boerdBTN = (Button) findViewById(R.id.boredBTN);
         boerdBTN.setOnClickListener(new View.OnClickListener() {
@@ -75,18 +86,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        friendsBTN = (Button) findViewById(R.id.friendsBTN);
-        friendsBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(MainActivity.this, " posted to the server !! ",
-                        Toast.LENGTH_LONG).show();
-
-                Intent intent = new Intent(MainActivity.this, Location_Activity.class);
-                startActivity(intent);
-            }
-        });
 
 
         eventBTN = (Button) findViewById(R.id.eventsBTN);
@@ -116,8 +115,64 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        switchBT = (Switch) findViewById(R.id.switchBT);
+        switchBT.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked){
+                    Log.v("========== = = = good to go = = = = ================", ""+isChecked);
+                    Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            //Put here
+                            BackgroundTasks asyncTask = new BackgroundTasks();
+
+                            //token place should be a token that identify the user himself
+                            asyncTask.execute("events/",user_id,"PUT", Double.toString(Math.random()));
+                            try {
+                                String re = asyncTask.get(5, TimeUnit.SECONDS);
+                                Log.d("Event data",re);
+
+                            }catch(Exception e){
+                                e.printStackTrace();
+                            }
+                            handler.postDelayed(this,5000);
+                        }
+                    };
+
+                }else{
+                    Log.v("========== = = = Stop Stop Stop..!! = = = = ================", ""+isChecked);
+                }
+
+            }
+        });
+
 
 
     }//End OnCreate
+
+
+
+    /*
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            //Put here
+            BackgroundTasks asyncTask = new BackgroundTasks();
+
+            //token place should be a token that identify the user himself
+            asyncTask.execute("events/","shit","PUT", Double.toString(Math.random()));
+            try {
+                String re = asyncTask.get(5, TimeUnit.SECONDS);
+                Log.d("Event data",re);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            handler.postDelayed(this,5000);
+        }
+    };
+    */
 
 }

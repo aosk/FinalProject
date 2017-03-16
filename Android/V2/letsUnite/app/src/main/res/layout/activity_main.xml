@@ -12,75 +12,61 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.abdulrahmanalshaghdali.letsunite.MainActivity">
-    
+
+
+
+
     <Button
-        android:text="I'm  Bored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
+        android:text=" -- Bored -- "
+        android:textSize="40sp"
+        android:layout_width="500dp"
+        android:layout_height="140dp"
         android:id="@+id/boredBTN"
+        android:background="@drawable/cast_album_art_placeholder"
+        android:textColor="@color/cast_libraries_material_featurehighlight_text_header_color"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/cast_album_art_placeholder"
-        android:textColor="@color/cast_libraries_material_featurehighlight_text_header_color" />
-
-    <Button
-        android:text="Friends Around"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:id="@+id/friendsBTN"
-        android:layout_below="@+id/boredBTN"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/cast_album_art_placeholder"
-        android:textColor="@color/cast_libraries_material_featurehighlight_text_header_color" />
-
-    <Button
-        android:text="Events"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/friendsBTN"
-        android:layout_marginTop="36dp"
-        android:id="@+id/eventsBTN"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/cast_album_art_placeholder"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:text="News"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/eventsBTN"
-        android:layout_marginTop="27dp"
-        android:id="@+id/newsBT"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/cast_album_art_placeholder"
-        android:textColor="@color/cast_expanded_controller_progress_text_color" />
-
-    <TextView
-        android:text="Testing part"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/newsBT"
-        android:layout_marginTop="62dp"
-        android:id="@+id/textView"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+
+
+    <Button
+        android:text=" -- Events -- "
+        android:textSize="40sp"
+        android:layout_width="500dp"
+        android:layout_height="140dp"
+        android:id="@+id/eventsBTN"
+        android:background="@drawable/cast_album_art_placeholder"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:layout_below="@+id/boredBTN"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp" />
+
+    <Button
+        android:text=" -- News -- "
+        android:textSize="40sp"
+        android:layout_width="500dp"
+        android:layout_height="140dp"
+        android:id="@+id/newsBT"
+        android:background="@drawable/cast_album_art_placeholder"
+        android:textColor="@color/cast_expanded_controller_progress_text_color"
+        android:layout_below="@+id/eventsBTN"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp" />
+
+    <Switch
+        android:text="Allow location to find events"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:id="@+id/switchBT"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#808080"
+        android:textStyle="bold"
+
+        />
 
 </RelativeLayout>
