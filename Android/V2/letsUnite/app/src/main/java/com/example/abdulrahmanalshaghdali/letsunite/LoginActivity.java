@@ -66,17 +66,17 @@ public class LoginActivity extends AppCompatActivity {
                         postData.put("password", mPasswordView.getText().toString());
 
                         String str = postData.toString();
-                        String re="";
+                        String respond="";
 
 
                         BackgroundTasks asyncLoad = new BackgroundTasks();
                         asyncLoad.execute("login/", str, "POST");
-                        re = asyncLoad.get(5,TimeUnit.SECONDS);
-                        Log.d("=-=-=-=-=-=-=--=-=-=>",re);
-                        if(re.equals("200")) {
+                        respond = asyncLoad.get(5,TimeUnit.SECONDS);
+                        Log.d("=-=-=-=-=-=-=--=-=-=>",respond);
+                        if(respond.equals("200")) {
                             Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
                             LoginActivity.this.startActivity(myIntent);
-                        }else if(re.equals("400")){
+                        }else if(respond.equals("400")){
                             Toast.makeText(LoginActivity.this, "You are not united !! Signup Plzz",
                                     Toast.LENGTH_LONG).show();
 
@@ -91,22 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                /*
-                String email = mEmailView.getText().toString();
-                String password = mPasswordView.getText().toString();
-                String fixedEmail = "aa";
 
-                // Verfication for Login.
-                if(email.equals(fixedEmail))
-                {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }else
-                {
-                   Toast.makeText(LoginActivity.this, "login failed)",
-                           Toast.LENGTH_LONG).show();
-                }
-                */
             }
         });
         signupBTN = (Button) findViewById(R.id.signUp);

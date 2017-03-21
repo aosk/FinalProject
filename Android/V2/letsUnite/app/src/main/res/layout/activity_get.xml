@@ -14,7 +14,7 @@
     <Button
         android:text="Find news"
         android:textSize="25sp"
-        android:layout_width="334dp"
+        android:layout_width="308dp"
         android:layout_height="77dp"
         android:id="@+id/button2"
         android:textColorLink="?attr/colorPrimary"

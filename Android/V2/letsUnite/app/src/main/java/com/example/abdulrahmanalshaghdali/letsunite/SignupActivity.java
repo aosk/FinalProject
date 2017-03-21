@@ -15,12 +15,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Array;
+
 import java.util.concurrent.TimeUnit;
 
 public class SignupActivity extends AppCompatActivity {
@@ -38,16 +37,7 @@ public class SignupActivity extends AppCompatActivity {
     Spinner s ;
     private String fname = "mydata";
 
-    //File ff;
 
-/*
-    File f = new File("app/res/com.example.abdulrahmanalshaghdali.letsunite/test.txt");
-
-    File internalStorageDir = getFilesDir();
-
-    File fl = new File(internalStorageDir, "fl.csv");
-
-*/
     Button signup ;
     String array[] = {"Press here to Choose group","DIT", "UCD", "DCU" , "FUCK"};
     //private FileOutputStream ff;
@@ -62,29 +52,6 @@ public class SignupActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, array);
         s.setAdapter(adapter);
 
-
-
-
-/*
-        if (!f.exists()) {
-            try {
-                f.createNewFile();
-
-                //Toast.makeText(SignupActivity.this, "file created",
-                  //      Toast.LENGTH_LONG).show();
-                Log.d("file Creted","--------------------------");
-
-
-                //Log.d("file Creted","--------------------------");
-            } catch (IOException e) {
-                e.printStackTrace();
-
-                Log.d("file Cant be Creted","--------------------------");
-
-
-            }
-        }
-*/
 
         firstName = (EditText)findViewById(R.id.firstName);
         lastName = (EditText) findViewById(R.id.lastName);
@@ -158,25 +125,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     try {
 
-                        try {
-                            //Wrap with ouputstream writer
-                            // and read with inputstream read
-                            FileOutputStream fout = openFileOutput(fname,MODE_ENABLE_WRITE_AHEAD_LOGGING);
-                            Log.d("-=-=-=-=-=-=-=-=-=-= Work "," OutputStream =- =-=-=- =- =-=- =-");
-                            OutputStreamWriter myWriter = new OutputStreamWriter(fout);
-                            BufferedWriter myBW = new BufferedWriter(myWriter);
-                            myBW.write(emailChecker);
-                            myBW.newLine();
-                            myBW.write(groupTypeChecker);
-                            myBW.newLine();
-                            myBW.close();
-                            myWriter.close();
-                            fout.close();
-                            Toast.makeText(SignupActivity.this, "file created",
-                                    Toast.LENGTH_LONG).show();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+
 
                         //ff.write(groupTypeChecker.getBytes());
                         // file.write(gruopTypeChecker);
@@ -201,8 +150,39 @@ public class SignupActivity extends AppCompatActivity {
                                     Toast.LENGTH_LONG).show();
                             Intent myIntent = new Intent(SignupActivity.this, LoginActivity.class);
                             SignupActivity.this.startActivity(myIntent);
+
+
+                            try {
+
+                                FileOutputStream fout = openFileOutput(fname,MODE_ENABLE_WRITE_AHEAD_LOGGING);
+                                Log.d("-=-=-=-=-=-=-=-=-=-= Work "," OutputStream =- =-=-=- =- =-=- =-");
+                                OutputStreamWriter myWriter = new OutputStreamWriter(fout);
+                                BufferedWriter myBW = new BufferedWriter(myWriter);
+                                myBW.write(emailChecker);
+                                myBW.newLine();
+                                myBW.write(groupTypeChecker);
+                                myBW.newLine();
+                                myBW.close();
+                                myWriter.close();
+                                fout.close();
+                                Toast.makeText(SignupActivity.this, "file created",
+                                        Toast.LENGTH_LONG).show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+
                         }else if(re.equals("400")){
-                            Toast.makeText(SignupActivity.this, "Opsss..!! we can't register your details ",
+                            Toast.makeText(SignupActivity.this, "Enter proper email buddy ! ",
+                                    Toast.LENGTH_LONG).show();
+
+                        }else if(re.equals("404")){
+                            Toast.makeText(SignupActivity.this, "We can't register your details!! try later",
+                                    Toast.LENGTH_LONG).show();
+
+                        }else if(re.equals("500")){
+                            Toast.makeText(SignupActivity.this, "Your email is already used ..!!",
                                     Toast.LENGTH_LONG).show();
 
                         }else{

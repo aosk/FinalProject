@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class BackgroundTasks extends AsyncTask<String, String, String> {
 
-    protected String r="OOOOOOps";
+    protected String r="Opssss!!";
     protected ArrayList<String> LABELS = null;
     protected ArrayList<String> config= null;
 
@@ -68,7 +68,7 @@ public class BackgroundTasks extends AsyncTask<String, String, String> {
 
             HttpURLConnection httpURLConnection = null;
 
-            httpURLConnection = (HttpURLConnection) new URL(local+""+params[0]).openConnection();
+            httpURLConnection = (HttpURLConnection) new URL(machine+""+params[0]).openConnection();
 
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
@@ -83,16 +83,20 @@ public class BackgroundTasks extends AsyncTask<String, String, String> {
 
 
 
-                httpURLConnection.setRequestProperty("group_id", "test_group");
+                httpURLConnection.setRequestProperty("group_id", params[3]);
                 httpURLConnection.setRequestProperty("user_id", params[1]);
 
                 Log.d("Abdul ..!! ", "I am here  <=====================================DeBugLine=============================================>!!>");
                 Log.d("This is parms[0] sent to server ", params[0]);
                 Log.d("This is parms[1] sent to server ", params[1]);
                 Log.d("This is parms[2] sent to server ", params[2]);
+                Log.d("This is parms[3] sent to server ", params[3]);
+                Log.d("This is parms[4] sent to server ", params[4]);
+                Log.d("This is parms[5] sent to server ", params[5]);
+                //Log.d("This is parms[3] sent to server ", params[3]);
 
-                httpURLConnection.setRequestProperty("x_loc", "5.123456");
-                httpURLConnection.setRequestProperty("y_loc", "-6.123456");
+                httpURLConnection.setRequestProperty("x_loc", params[4]);
+                httpURLConnection.setRequestProperty("y_loc", params[5]);
 
             }
             httpURLConnection.setRequestMethod(config.get(1));
@@ -102,43 +106,39 @@ public class BackgroundTasks extends AsyncTask<String, String, String> {
             OutputStream wr = httpURLConnection.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(wr, "UTF-8");
             osw.write(params[1]);//----------------------- Check point --!
-            //Log.d("config[1]============>",config.get(1));
+            Log.d("config[1]============>",config.get(1));
             osw.flush();
             osw.close();
             wr.close();
 
             String respond=null;
-
+            String respondCode = Integer.toString(httpURLConnection.getResponseCode());
+            if(respondCode.equals("200")){
             InputStream in = httpURLConnection.getInputStream();
             Log.d("Connection   -----> ","closed");
             InputStreamReader inputStreamReader = new InputStreamReader(in, "UTF-8");
             if("PUT".equals(config.get(1))) {
                 Log.d("Get IO","Before");
                 BufferedReader br = new BufferedReader(inputStreamReader);
-                Log.d("Got IO","Yeap");
+                Log.d("Got IO","Yeahhh");
                 //Convert to JSON
                 String line = null;
                 while ((line = br.readLine()) != null) {
                     respond += (line+'\n');
                 }
                 br.close();
-            }else{
-                respond = Integer.toString(httpURLConnection.getResponseCode());
+            }}else{
+                respond=respondCode;
             }
             Log.d("Stream connected","-=-=-=-=-=-= Good Worked =-=-=-=-=-=-");
 
             //Log.d("Data line:",respond);
-            //Log.d("pick the nick !!  <===================================== !!>",respond);
-            r=respond;
-            //Log.d("Abdul ..!! ", "I am here  <=====================================> Your debug buddy <=============================================>!!>");
-            //br.close();
+            Log.d("pick the nick !!  <===================================== !!>",respond);
             httpURLConnection.disconnect();
             return respond;
 
         } catch (Exception e) {
             e.printStackTrace();
-            //Toast.makeText(LoginActivity.this, "Cannot Estabilish Connection",
-            //       Toast.LENGTH_LONG).show();
         }
         return r;
     }

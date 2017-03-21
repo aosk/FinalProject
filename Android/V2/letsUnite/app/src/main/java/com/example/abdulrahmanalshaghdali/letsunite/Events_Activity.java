@@ -7,30 +7,32 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
 
 public class Events_Activity extends AppCompatActivity {
 
+    private String fname = "mydata";
+    String user_id;
+    String group_id;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
-        Log.d("Switch","Event");
+        Log.d(" - - - - - - -Switch- - - - - - -","Event");
         //String re="invalid";
         TextView t3=(TextView) findViewById(R.id.textView3);
+        Bundle bundle = getIntent().getExtras();
 
-        BackgroundTasks asyncTask = new BackgroundTasks();
 
-        //token place should be a token that identify the user himself
-        asyncTask.execute("events/","token","PUT");
-        try {
-            String re = asyncTask.get(5, TimeUnit.SECONDS);
-            t3.setText(re);
+        t3.setText(bundle.getString("events"));
 
-        }catch(Exception e){
-            e.printStackTrace();
-        }
     }
 
 }

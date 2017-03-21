@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +39,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.*;
 
@@ -60,6 +65,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
 
     Marker currentLocation ;
+
+    private String fname = "mydata";
+    String user_id;
+    String group_id;
 
 
     @Override
@@ -100,12 +109,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             {
 
                 try {
+                    FileInputStream fin = openFileInput(fname);
+                    InputStreamReader myReader = new InputStreamReader(fin);
+                    BufferedReader myBR = new BufferedReader(myReader);
+                    user_id = myBR.readLine();
+                    group_id = myBR.readLine();
+                    Log.d("user_id =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=>",user_id);
+                    Log.d("group_id =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=>",group_id);
+                    myBR.close();
+                    myReader.close();
+                    fin.close();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+
+                try {
                     JSONObject postData = new JSONObject();
                     //postData.put("lat", newLocationLat);
                     //postData.put("long", newLocationLong);
 
                     postData.put("lat",Double.toString(lan));
                     postData.put("long", Double.toString(longT));
+                    postData.put("user_id", user_id);
+                    postData.put("group_id", group_id);
 
                     String str = postData.toString();
                     String re="";
@@ -214,7 +240,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             if(ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)){
-                //ask the user for permission
+
+
             }else{
                 //ActivityCompat ac = new ActivityCompat(this).add
                 ActivityCompat.requestPermissions(MapsActivity.this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},MY_PERMISSION_ACCESS_COARSE_LOCATION);
@@ -250,21 +277,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
-
-        switch(requestCode){
-            case MY_PERMISSION_ACCESS_COARSE_LOCATION:{
-                if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                    //permission granted
-                }else{
-                    //permission denied, cannot switch to next activity
-                    Log.d("Permisson","Denied");
-                }
-                return;
-            }
-        }
-    }
 
     @Override
     public void onConnectionSuspended(int i)
@@ -296,4 +308,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
+
+
 }
